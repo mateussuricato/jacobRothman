@@ -20,13 +20,13 @@
     --gold: #C9A84C;
     --gold-light: #EDD97A;
     --gold-dim: #8A6820;
-    --wine: #1A3A6E;
-    --wine-light: #2A5298;
-    --bg: #080E1A;
-    --bg2: #0A1628;
-    --bg3: #0D1F3C;
-    --surface: rgba(255,255,255,0.06);
-    --surface2: rgba(255,255,255,0.10);
+    --wine: #6E1A1A;
+    --wine-light: #C0392B;
+    --bg: #080808;
+    --bg2: #0F0F0F;
+    --bg3: #141414;
+    --surface: rgba(255,255,255,0.05);
+    --surface2: rgba(255,255,255,0.09);
     --border: rgba(201,168,76,0.15);
     --border-hover: rgba(201,168,76,0.4);
     --text: #F5F2EC;
@@ -160,9 +160,9 @@
     text-align: center;
     padding: 64px 16px 48px;
     background:
-      radial-gradient(ellipse at 50% -10%, rgba(26,58,110,0.6) 0%, transparent 60%),
+      radial-gradient(ellipse at 50% -10%, rgba(0,0,0,0.6) 0%, transparent 60%),
       radial-gradient(ellipse at 20% 80%, rgba(201,168,76,0.06) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 60%, rgba(26,58,110,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 60%, rgba(0,0,0,0.15) 0%, transparent 50%),
       var(--bg);
     overflow: hidden;
   }
@@ -480,8 +480,8 @@
     font-size: 9px;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: #6A9FD8;
-    border: 1px solid rgba(42,82,152,0.4);
+    color: var(--gold-dim);
+    border: 1px solid rgba(201,168,76,0.2);
     padding: 2px 8px;
     white-space: nowrap;
   }
@@ -491,75 +491,73 @@
   /* ══════════════════════════════════
      MANDAMENTOS
   ══════════════════════════════════ */
+  /* ══════════════════════════════════
+     CARROSSEL MANDAMENTOS
+  ══════════════════════════════════ */
   .section-mandamentos {
-    padding: 64px 16px;
+    padding: 64px 0 0;
     background: var(--bg3);
   }
 
-  .mandamentos-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
-    max-width: 900px;
-    margin: 0 auto;
+  .section-mandamentos .container {
+    padding: 0 16px;
   }
 
-  @media (min-width: 640px) {
-    .mandamentos-grid { grid-template-columns: 1fr 1fr; }
-  }
-
-  @media (min-width: 960px) {
-    .mandamentos-grid { grid-template-columns: 1fr 1fr 1fr; }
-  }
-
-  .mandamento-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 24px 20px;
+  .carousel-wrapper {
     position: relative;
     overflow: hidden;
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.4s ease, transform 0.4s ease, border-color 0.3s, background 0.3s;
+    width: 100%;
+    cursor: grab;
+    user-select: none;
   }
-  .mandamento-card.visible { opacity: 1; transform: translateY(0); }
-  .mandamento-card:hover {
-    border-color: var(--border-hover);
-    background: var(--surface2);
-  }
-  .mandamento-card::before {
+  .carousel-wrapper:active { cursor: grabbing; }
+  .carousel-wrapper::before,
+  .carousel-wrapper::after {
     content: '';
-    position: absolute; top: 0; left: 0;
-    width: 100%; height: 2px;
-    background: linear-gradient(90deg, var(--wine-light), var(--gold), transparent);
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 180px;
+    z-index: 2;
+    pointer-events: none;
   }
-  /* glow corner */
-  .mandamento-card::after {
-    content: '';
-    position: absolute; bottom: 0; right: 0;
-    width: 80px; height: 80px;
-    background: radial-gradient(circle at 100% 100%, rgba(201,168,76,0.06), transparent);
+  .carousel-wrapper::before {
+    left: 0;
+    background: linear-gradient(90deg, var(--bg3) 0%, transparent 100%);
+  }
+  .carousel-wrapper::after {
+    right: 0;
+    background: linear-gradient(270deg, var(--bg3) 0%, transparent 100%);
+  }
+
+  .carousel-track {
+    display: flex;
+    gap: 16px;
+    padding: 8px 16px 16px;
+    will-change: transform;
+    transition: transform 0.05s linear;
+  }
+
+  .carousel-slide {
+    flex-shrink: 0;
+    width: 260px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    transition: border-color 0.3s;
+  }
+  .carousel-slide:hover { border-color: var(--border-hover); }
+
+  .carousel-slide img {
+    width: 100%;
+    height: 380px;
+    object-fit: cover;
+    display: block;
     pointer-events: none;
   }
 
-  .m-num {
-    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
-    color: var(--gold-dim); margin-bottom: 8px;
-  }
-  .m-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 20px; letter-spacing: 1px; color: var(--gold);
-    margin-bottom: 10px; line-height: 1.1;
-  }
-  .m-desc {
-    font-size: 13px; line-height: 1.7; color: var(--text-dim);
-  }
-
-  /* card 11 — centralizado na coluna do meio */
-  @media (min-width: 960px) {
-    .mandamento-card:last-child {
-      grid-column: 2 / 3;
-    }
+  @media (max-width: 639px) {
+    .carousel-slide { width: 220px; }
+    .carousel-slide img { height: 320px; }
   }
 
   /* ══════════════════════════════════
@@ -612,7 +610,7 @@
   #oferta {
     padding: 64px 16px 80px;
     background:
-      radial-gradient(ellipse at 50% 0%, rgba(26,58,110,0.35) 0%, transparent 60%),
+      radial-gradient(ellipse at 50% 0%, rgba(0,0,0,0.35) 0%, transparent 60%),
       var(--bg);
     text-align: center;
   }
@@ -621,13 +619,13 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(26,58,110,0.35);
-    border: 1px solid rgba(42,82,152,0.6);
+    background: rgba(0,0,0,0.35);
+    border: 1px solid rgba(201,168,76,0.3);
     padding: 7px 18px;
     font-size: 11px;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: #6A9FD8;
+    color: var(--gold-dim);
     margin-bottom: 32px;
   }
   .urgency-badge::before { content: ''; }
@@ -728,8 +726,71 @@
     text-align: center;
     border-top: 1px solid rgba(255,255,255,0.04);
   }
-  footer p { font-size: 11px; color: var(--text-muted); letter-spacing: 0.5px; line-height: 2; }
-  footer a { color: var(--gold-dim); text-decoration: none; }
+  /* ══════════════════════════════════
+     COMO FUNCIONA / ACESSO
+  ══════════════════════════════════ */
+  .section-acesso {
+    padding: 64px 16px;
+    background: var(--bg3);
+  }
+
+  .acesso-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 767px) {
+    .acesso-grid { grid-template-columns: 1fr; }
+  }
+
+  .acesso-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .acesso-card:hover {
+    border-color: var(--border-hover);
+    background: var(--surface2);
+  }
+  .acesso-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .acesso-card-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--gold-dim);
+    margin-bottom: 12px;
+  }
+  .acesso-card-icon {
+    font-size: 28px;
+    margin-bottom: 14px;
+    line-height: 1;
+  }
+  .acesso-card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 1.5px;
+    color: var(--gold);
+    margin-bottom: 10px;
+    line-height: 1.1;
+  }
+  .acesso-card-desc {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text-dim);
+  }
+  .acesso-card-desc strong { color: var(--text); font-weight: 600; }
 </style>
 </head>
 <body>
@@ -800,7 +861,7 @@
 <section class="section-jacob">
   <div class="container">
     <div class="gold-line"></div>
-    <p class="section-eyebrow fi">Quem está revelando</p>
+    <p class="section-eyebrow fi">Quem ministra as aulas</p>
     <h2 class="section-title fi" style="margin-bottom:48px;">Jacob <span class="shimmer">Rothman</span></h2>
 
     <div class="jacob-inner fi">
@@ -897,72 +958,71 @@
     <h2 class="section-title fi">Os <span class="shimmer">11 Mandamentos</span></h2>
     <p class="section-sub fi col-center">Cada mandamento é um módulo completo. Um sistema que se aplica do zero, independente de onde você está hoje.</p>
 
-    <div class="mandamentos-grid">
+    <div class="carousel-wrapper" id="carousel">
+      <div class="carousel-track" id="carouselTrack">
+        <div class="carousel-slide"><img src="images/1.avif" alt="Mandamento I"></div>
+        <div class="carousel-slide"><img src="images/2.avif" alt="Mandamento II"></div>
+        <div class="carousel-slide"><img src="images/3.avif" alt="Mandamento III"></div>
+        <div class="carousel-slide"><img src="images/4.avif" alt="Mandamento IV"></div>
+        <div class="carousel-slide"><img src="images/5.jpg" alt="Mandamento V"></div>
+        <div class="carousel-slide"><img src="images/6.avif" alt="Mandamento VI"></div>
+        <div class="carousel-slide"><img src="images/7.avif" alt="Mandamento VII"></div>
+        <div class="carousel-slide"><img src="images/8.avif" alt="Mandamento VIII"></div>
+        <div class="carousel-slide"><img src="images/9.avif" alt="Mandamento IX"></div>
+        <div class="carousel-slide"><img src="images/10.avif" alt="Mandamento X"></div>
+        <div class="carousel-slide"><img src="images/11.avif" alt="Mandamento XI"></div>
+        <!-- duplicatas para loop infinito -->
+        <div class="carousel-slide"><img src="images/1.avif" alt="Mandamento I"></div>
+        <div class="carousel-slide"><img src="images/2.avif" alt="Mandamento II"></div>
+        <div class="carousel-slide"><img src="images/3.avif" alt="Mandamento III"></div>
+        <div class="carousel-slide"><img src="images/4.avif" alt="Mandamento IV"></div>
+        <div class="carousel-slide"><img src="images/5.jpg" alt="Mandamento V"></div>
+        <div class="carousel-slide"><img src="images/6.avif" alt="Mandamento VI"></div>
+        <div class="carousel-slide"><img src="images/7.avif" alt="Mandamento VII"></div>
+        <div class="carousel-slide"><img src="images/8.avif" alt="Mandamento VIII"></div>
+        <div class="carousel-slide"><img src="images/9.avif" alt="Mandamento IX"></div>
+        <div class="carousel-slide"><img src="images/10.avif" alt="Mandamento X"></div>
+        <div class="carousel-slide"><img src="images/11.avif" alt="Mandamento XI"></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-      <div class="mandamento-card">
-        <p class="m-num">Mandamento I</p>
-        <p class="m-title">O Mandamento do Primeiro Fruto</p>
-        <p class="m-desc">Antes de pagar qualquer conta, qualquer dívida, qualquer pessoa... você se paga primeiro. A regra que os ricos nunca violam e que os pobres nunca aprendem.</p>
+<!-- ══ COMO FUNCIONA ══ -->
+<section class="section-acesso">
+  <div class="container">
+    <div class="gold-line"></div>
+    <p class="section-eyebrow fi">Acesso ao método</p>
+    <h2 class="section-title fi">Como você vai <span class="shimmer">receber as aulas</span></h2>
+    <p class="section-sub fi col-center">Simples, rápido e direto. Sem complicação.</p>
+
+    <div class="acesso-grid fi">
+
+      <div class="acesso-card">
+        <div class="acesso-card-num">01</div>
+        <div class="acesso-card-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        </div>
+        <h3 class="acesso-card-title">Receba o acesso</h3>
+        <p class="acesso-card-desc">O link das aulas chega automaticamente no seu <strong>e-mail</strong> e no seu <strong>WhatsApp</strong>.</p>
       </div>
 
-      <div class="mandamento-card">
-        <p class="m-num">Mandamento II</p>
-        <p class="m-title">O Mandamento da Corrente de Davi</p>
-        <p class="m-desc">Dinheiro parado é dinheiro morto. Aprenda a criar um fluxo contínuo onde cada real trabalha por você, mesmo enquanto você dorme.</p>
+      <div class="acesso-card">
+        <div class="acesso-card-num">02</div>
+        <div class="acesso-card-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="white" stroke="none"/></svg>
+        </div>
+        <h3 class="acesso-card-title">Assista as aulas</h3>
+        <p class="acesso-card-desc">Acesse as aulas em vídeo de qualquer dispositivo: celular, tablet ou computador.</p>
       </div>
 
-      <div class="mandamento-card">
-        <p class="m-num">Mandamento III</p>
-        <p class="m-title">O Mandamento da Pedra sobre Pedra</p>
-        <p class="m-desc">Ricos não compram coisas. Ricos compram coisas que geram mais dinheiro. A estrutura silenciosa para empilhar patrimônio sem que ninguém perceba.</p>
-      </div>
-
-      <div class="mandamento-card">
-        <p class="m-num">Mandamento IV</p>
-        <p class="m-title">O Mandamento do Selo do Rei</p>
-        <p class="m-desc">Seu nome vale mais que seu saldo. Confiança e reputação são ativos que abrem portas que nenhuma quantia de dinheiro jamais abrirá.</p>
-      </div>
-
-      <div class="mandamento-card">
-        <p class="m-num">Mandamento V</p>
-        <p class="m-title">O Mandamento da Mesa de Salomão</p>
-        <p class="m-desc">Tudo na vida é negociável. Quem não negocia paga mais do que deveria. Os princípios da negociação que os ricos usam em silêncio.</p>
-      </div>
-
-      <div class="mandamento-card">
-        <p class="m-num">Mandamento VI</p>
-        <p class="m-title">O Mandamento do Pergaminho Oculto</p>
-        <p class="m-desc">O único investimento que nunca perde valor está dentro da sua cabeça. O conhecimento certo é o ativo mais protegido e rentável do mundo.</p>
-      </div>
-
-      <div class="mandamento-card">
-        <p class="m-num">Mandamento VII</p>
-        <p class="m-title">O Mandamento do Trono Herdado</p>
-        <p class="m-desc">Rico não pensa no mês. Rico pensa nos próximos 50 anos. Como construir um sistema que sobrevive a você e continua crescendo depois que você partir.</p>
-      </div>
-
-      <div class="mandamento-card">
-        <p class="m-num">Mandamento VIII</p>
-        <p class="m-title">O Mandamento do Escudo de Davi</p>
-        <p class="m-desc">Oportunidade não espera. A coragem de agir antes de se sentir pronto é o que separa quem acumula riqueza de quem apenas observa os outros subirem.</p>
-      </div>
-
-      <div class="mandamento-card">
-        <p class="m-num">Mandamento IX</p>
-        <p class="m-title">O Mandamento do Conselho dos Reis</p>
-        <p class="m-desc">Você vale o que as pessoas ao seu redor valem. Os ricos escolhem seus círculos com precisão cirúrgica. Aprenda a fazer o mesmo.</p>
-      </div>
-
-      <div class="mandamento-card">
-        <p class="m-num">Mandamento X</p>
-        <p class="m-title">O Mandamento do Ouro de Ofir</p>
-        <p class="m-desc">Quem controla o que é raro, controla o preço. Aprenda a se tornar insubstituível e a usar a escassez como alavanca de poder e riqueza.</p>
-      </div>
-
-      <div class="mandamento-card">
-        <p class="m-num">Mandamento XI</p>
-        <p class="m-title">O Mandamento do Véu de Salomão</p>
-        <p class="m-desc">O homem verdadeiramente rico não anuncia seus planos. Ele os executa. O silêncio estratégico que protege e multiplica tudo que você constrói.</p>
+      <div class="acesso-card">
+        <div class="acesso-card-num">03</div>
+        <div class="acesso-card-icon">
+          <svg width="40" height="24" viewBox="0 0 40 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M20 12c-2-4-6-8-10-8C4.5 4 1 7.6 1 12s3.5 8 9 8c4 0 8-4 10-8zm0 0c2 4 6 8 10 8 5.5 0 9-3.6 9-8s-3.5-8-9-8c-4 0-8 4-10 8z"/></svg>
+        </div>
+        <h3 class="acesso-card-title">Acesso vitalício</h3>
+        <p class="acesso-card-desc">O conteúdo é seu para sempre. Assista quantas vezes você quiser e aplique cada mandamento no seu próprio ritmo.</p>
       </div>
 
     </div>
@@ -1014,17 +1074,13 @@
     </div>
 
     <div class="perks-row fi">
-      <span class="perk">11 Mandamentos completos</span>
+      <span class="perk">Aulas em vídeo</span>
       <span class="perk">Acesso imediato</span>
-      <span class="perk">Funciona no celular</span>
       <span class="perk">Pagamento único</span>
     </div>
 
     <a href="https://pay.kirvano.com/9d03fa34-cc0d-4341-8920-44ed90615391" class="btn-primary fi">Quero Meu Acesso Agora</a>
     <p class="btn-note fi" style="margin-top:16px;">🔒 Pagamento seguro · Entrega imediata</p>
-    <p class="fi" style="margin-top:14px; font-size:13px; color:var(--text-dim); max-width:340px; margin-left:auto; margin-right:auto; line-height:1.7;">
-      📩 Assim que o pagamento for confirmado, você recebe o acesso direto no seu <strong style="color:var(--text);">e-mail</strong> e no seu <strong style="color:var(--text);">WhatsApp</strong>.
-    </p>
 
     <p class="fi" style="margin-top:36px; font-size:13px; color:var(--text-muted); max-width:400px; margin-left:auto; margin-right:auto; line-height:1.8;">
       Daqui a um ano você vai desejar ter começado hoje.<br>Cada mês sem um sistema é dinheiro perdido para sempre.
@@ -1041,11 +1097,11 @@
     <div class="faq-list">
       <div class="faq-item">
         <button class="faq-q">Em que formato é o produto? <span class="faq-icon">+</span></button>
-        <p class="faq-a">100% digital. Você recebe acesso imediato após o pagamento. Leia e aplique de qualquer dispositivo: celular, tablet ou computador. Sem app para baixar.</p>
+        <p class="faq-a">Aulas em vídeo gravadas pelo Jacob Rothman, com acesso imediato após o pagamento. Assista de qualquer dispositivo: celular, tablet ou computador.</p>
       </div>
       <div class="faq-item">
         <button class="faq-q">Como vou receber o acesso? <span class="faq-icon">+</span></button>
-        <p class="faq-a">Assim que o pagamento for confirmado, o acesso chega automaticamente no seu e-mail e também no seu WhatsApp. Confira a caixa de entrada (e o spam) do e-mail usado na compra — em poucos minutos está tudo na sua mão.</p>
+        <p class="faq-a">Assim que o pagamento for confirmado, o link das aulas chega automaticamente no seu e-mail e também no seu WhatsApp. Confira a caixa de entrada (e o spam) do e-mail usado na compra — em poucos minutos está tudo disponível.</p>
       </div>
       <div class="faq-item">
         <button class="faq-q">Isso é um esquema para enriquecer rápido? <span class="faq-icon">+</span></button>
@@ -1090,7 +1146,7 @@ const obs = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.1 });
 
-document.querySelectorAll('.fi, .pain-item, .mandamento-card, .testi-card').forEach((el, i) => {
+document.querySelectorAll('.fi, .pain-item, .mandamento-card, .testi-card, .acesso-card').forEach((el, i) => {
   obs.observe(el);
 });
 
@@ -1313,6 +1369,89 @@ document.querySelectorAll('.faq-q').forEach(btn => {
     camera.aspect = w / H;
     camera.updateProjectionMatrix();
   });
+})();
+</script>
+<script>
+// ── CARROSSEL ──
+(function() {
+  const wrapper = document.getElementById('carousel');
+  const track = document.getElementById('carouselTrack');
+  const slideWidth = () => track.children[0].offsetWidth + 16; // width + gap
+  const total = 11; // número original de slides
+  let offset = 0;
+  let autoSpeed = 0.6; // px por frame
+  let isHovered = false;
+  let isDragging = false;
+  let dragStartX = 0;
+  let dragStartOffset = 0;
+  let touchResumeTimer = null;
+  let userInteracted = false;
+
+  function getMaxOffset() {
+    return slideWidth() * total;
+  }
+
+  function animate() {
+    if (!isHovered && !isDragging && !userInteracted) {
+      offset += autoSpeed;
+      if (offset >= getMaxOffset()) offset -= getMaxOffset();
+      track.style.transform = `translateX(${-offset}px)`;
+    }
+    requestAnimationFrame(animate);
+  }
+
+  // Mouse hover
+  wrapper.addEventListener('mouseenter', () => { isHovered = true; });
+  wrapper.addEventListener('mouseleave', () => { isHovered = false; });
+
+  // Mouse drag
+  wrapper.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    userInteracted = false;
+    dragStartX = e.clientX;
+    dragStartOffset = offset;
+    wrapper.style.cursor = 'grabbing';
+  });
+  window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    const delta = dragStartX - e.clientX;
+    offset = dragStartOffset + delta;
+    if (offset < 0) offset += getMaxOffset();
+    if (offset >= getMaxOffset()) offset -= getMaxOffset();
+    track.style.transform = `translateX(${-offset}px)`;
+  });
+  window.addEventListener('mouseup', () => {
+    if (!isDragging) return;
+    isDragging = false;
+    wrapper.style.cursor = 'grab';
+  });
+
+  // Touch drag
+  wrapper.addEventListener('touchstart', (e) => {
+    clearTimeout(touchResumeTimer);
+    userInteracted = true;
+    isDragging = true;
+    dragStartX = e.touches[0].clientX;
+    dragStartOffset = offset;
+  }, { passive: true });
+
+  wrapper.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    const delta = dragStartX - e.touches[0].clientX;
+    offset = dragStartOffset + delta;
+    if (offset < 0) offset += getMaxOffset();
+    if (offset >= getMaxOffset()) offset -= getMaxOffset();
+    track.style.transform = `translateX(${-offset}px)`;
+  }, { passive: true });
+
+  wrapper.addEventListener('touchend', () => {
+    isDragging = false;
+    touchResumeTimer = setTimeout(() => {
+      userInteracted = false;
+    }, 3000);
+  });
+
+  animate();
 })();
 </script>
 </body>

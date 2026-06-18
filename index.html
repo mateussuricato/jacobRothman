@@ -425,34 +425,25 @@
   }
 
   .judeus-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 680px;
     margin: 0 auto;
-  }
-  @media (min-width: 540px) {
-    .judeus-grid { grid-template-columns: 1fr 1fr; }
-  }
-  @media (min-width: 900px) {
-    .judeus-grid { grid-template-columns: repeat(4, 1fr); }
-    .judeu-card:nth-child(5),
-    .judeu-card:nth-child(6),
-    .judeu-card:nth-child(7) {
-      grid-column: span 1;
-    }
-    .judeus-grid .judeu-card:nth-child(5) { grid-column: 1; }
   }
 
   .judeu-card {
     background: var(--surface);
     border: 1px solid var(--border);
-    padding: 24px 18px;
-    text-align: center;
+    padding: 14px 20px;
+    display: grid;
+    grid-template-columns: 32px 1fr auto;
+    align-items: center;
+    gap: 14px;
     position: relative;
     overflow: hidden;
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(12px);
     transition: opacity 0.4s ease, transform 0.4s ease, border-color 0.3s, background 0.3s;
   }
   .judeu-card.visible { opacity: 1; transform: translateY(0); }
@@ -467,22 +458,14 @@
     background: linear-gradient(90deg, transparent, var(--gold), transparent);
   }
 
-  .judeu-tag {
-    display: inline-block;
-    font-size: 9px;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    color: #6A9FD8;
-    border: 1px solid rgba(42,82,152,0.4);
-    padding: 3px 10px;
-    margin-bottom: 14px;
-  }
-
   .judeu-icon {
-    font-size: 28px;
-    margin-bottom: 12px;
+    font-size: 22px;
     line-height: 1;
     opacity: 0.85;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
   }
 
   .judeu-name {
@@ -490,14 +473,20 @@
     font-size: 18px;
     letter-spacing: 1.5px;
     color: var(--gold);
-    margin-bottom: 10px;
   }
 
-  .judeu-desc { 
-    font-size: 14px;
-    line-height: 1.7;
-    color: var(--text-dim);
+  .judeu-tag {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #6A9FD8;
+    border: 1px solid rgba(42,82,152,0.4);
+    padding: 2px 8px;
+    white-space: nowrap;
   }
+
+  .judeu-desc { display: none; }
 
   /* ══════════════════════════════════
      MANDAMENTOS
@@ -843,66 +832,57 @@
     <div class="judeus-grid">
 
       <div class="judeu-card fi">
-        <div class="judeu-tag">Influência</div>
         <div class="judeu-icon">✝</div>
         <p class="judeu-name">Jesus de Nazaré</p>
-        <p class="judeu-desc">O homem mais influente de toda a história da humanidade. Dois mil anos depois, bilhões ainda seguem seus ensinamentos.</p>
+        <div class="judeu-tag">Influência</div>
       </div>
 
       <div class="judeu-card fi">
-        <div class="judeu-tag">Império Midiático</div>
         <div class="judeu-icon">📺</div>
         <p class="judeu-name">Silvio Santos</p>
-        <p class="judeu-desc">De camelô a dono de rede de televisão. Construiu do zero um dos maiores impérios do entretenimento brasileiro. Puro código de riqueza em ação.</p>
+        <div class="judeu-tag">Império Midiático</div>
       </div>
 
       <div class="judeu-card fi">
-        <div class="judeu-tag">Entretenimento</div>
         <div class="judeu-icon">🎤</div>
         <p class="judeu-name">Luciano Hulk</p>
-        <p class="judeu-desc">Um dos apresentadores mais bem-sucedidos do Brasil. Transformou talento e carisma em um império de mídia, negócios e influência.</p>
+        <div class="judeu-tag">Entretenimento</div>
       </div>
 
       <div class="judeu-card fi">
-        <div class="judeu-tag">Prosperidade</div>
         <div class="judeu-icon">♛</div>
         <p class="judeu-name">Rei Salomão</p>
-        <p class="judeu-desc">O homem mais rico que já existiu na face da terra. Sua riqueza e sabedoria eram lendárias em todo o mundo conhecido.</p>
+        <div class="judeu-tag">Prosperidade</div>
       </div>
 
       <div class="judeu-card fi">
-        <div class="judeu-tag">Genialidade</div>
         <div class="judeu-icon">⚛</div>
         <p class="judeu-name">Albert Einstein</p>
-        <p class="judeu-desc">O maior gênio da história moderna. Revolucionou a física e a forma como a humanidade entende o universo.</p>
+        <div class="judeu-tag">Genialidade</div>
       </div>
 
       <div class="judeu-card fi">
-        <div class="judeu-tag">Finanças</div>
         <div class="judeu-icon">🏛</div>
         <p class="judeu-name">Mayer A. Rothschild</p>
-        <p class="judeu-desc">Construiu o império bancário mais poderoso da história. Financiou nações inteiras e moldou a economia mundial.</p>
+        <div class="judeu-tag">Finanças</div>
       </div>
 
       <div class="judeu-card fi">
-        <div class="judeu-tag">Investimentos</div>
         <div class="judeu-icon">📈</div>
         <p class="judeu-name">Warren Buffett</p>
-        <p class="judeu-desc">O maior investidor de todos os tempos. Transformou cada centavo em um império de centenas de bilhões de dólares.</p>
+        <div class="judeu-tag">Investimentos</div>
       </div>
 
       <div class="judeu-card fi">
-        <div class="judeu-tag">Tecnologia</div>
-        <div class="judeu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="#C9A84C"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></div>
+        <div class="judeu-icon"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="#C9A84C"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></div>
         <p class="judeu-name">Mark Zuckerberg</p>
-        <p class="judeu-desc">Criou a maior rede social do mundo. Conectou mais de 3 bilhões de pessoas e construiu um dos maiores impérios digitais.</p>
+        <div class="judeu-tag">Tecnologia</div>
       </div>
 
       <div class="judeu-card fi">
-        <div class="judeu-tag">Ciência da Mente</div>
         <div class="judeu-icon">🧠</div>
         <p class="judeu-name">Sigmund Freud</p>
-        <p class="judeu-desc">Fundou a psicanálise e mudou para sempre como o mundo compreende a mente humana e o comportamento.</p>
+        <div class="judeu-tag">Ciência da Mente</div>
       </div>
 
     </div>

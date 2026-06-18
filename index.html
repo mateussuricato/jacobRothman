@@ -795,6 +795,41 @@
 </head>
 <body>
 
+<style>
+  .topbar {
+    width: 100%;
+    background: linear-gradient(90deg, var(--gold-dim), var(--gold), var(--gold-light), var(--gold), var(--gold-dim));
+    text-align: center;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    color: #0F0A06;
+    letter-spacing: 0.5px;
+    position: relative;
+    z-index: 100;
+  }
+  .topbar span.topbar-date {
+    color: #0F0A06;
+    font-weight: 800;
+  }
+  .topbar span.topbar-time {
+    color: #0F0A06;
+    font-weight: 800;
+  }
+</style>
+
+<div class="topbar">
+  Desconto especial válido até &nbsp;<span class="topbar-date" id="topbarDate"></span>&nbsp; às <span class="topbar-time">23:59!</span>
+</div>
+
+<script>
+  const d = new Date();
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  document.getElementById('topbarDate').textContent = day + '/' + month;
+</script>
+
 <div id="particles"></div>
 
 <!-- ══ HERO ══ -->

@@ -971,18 +971,6 @@
         <div class="carousel-slide"><img src="images/9.avif" alt="Mandamento IX"></div>
         <div class="carousel-slide"><img src="images/10.avif" alt="Mandamento X"></div>
         <div class="carousel-slide"><img src="images/11.avif" alt="Mandamento XI"></div>
-        <!-- duplicatas para loop infinito -->
-        <div class="carousel-slide"><img src="images/1.avif" alt="Mandamento I"></div>
-        <div class="carousel-slide"><img src="images/2.avif" alt="Mandamento II"></div>
-        <div class="carousel-slide"><img src="images/3.avif" alt="Mandamento III"></div>
-        <div class="carousel-slide"><img src="images/4.avif" alt="Mandamento IV"></div>
-        <div class="carousel-slide"><img src="images/5.jpg" alt="Mandamento V"></div>
-        <div class="carousel-slide"><img src="images/6.avif" alt="Mandamento VI"></div>
-        <div class="carousel-slide"><img src="images/7.avif" alt="Mandamento VII"></div>
-        <div class="carousel-slide"><img src="images/8.avif" alt="Mandamento VIII"></div>
-        <div class="carousel-slide"><img src="images/9.avif" alt="Mandamento IX"></div>
-        <div class="carousel-slide"><img src="images/10.avif" alt="Mandamento X"></div>
-        <div class="carousel-slide"><img src="images/11.avif" alt="Mandamento XI"></div>
       </div>
     </div>
   </div>
@@ -1376,25 +1364,56 @@ document.querySelectorAll('.faq-q').forEach(btn => {
 (function() {
   const wrapper = document.getElementById('carousel');
   const track = document.getElementById('carouselTrack');
-  const slideWidth = () => track.children[0].offsetWidth + 16; // width + gap
-  const total = 11; // número original de slides
-  let offset = 0;
-  let autoSpeed = 0.6; // px por frame
+
+  // Remove duplicatas do HTML — vamos clonar via JS
+  const originalSlides = Array.from(track.children);
+  const total = originalSlides.length;
+
+  // Clona antes e depois para loop seamless
+  originalSlides.forEach(slide => {
+    track.appendChild(slide.cloneNode(true));
+  });
+  originalSlides.forEach(slide => {
+    track.insertBefore(slide.cloneNode(true), track.firstChild);
+  });
+
+  const slideW = () => track.children[0].offsetWidth + 16;
+  const loopStart = () => slideW() * total; // offset onde começa o set original
+
+  // Começa no set do meio (original)
+  let offset = loopStart();
+  track.style.transition = 'none';
+  track.style.transform = `translateX(${-offset}px)`;
+
   let isHovered = false;
   let isDragging = false;
   let dragStartX = 0;
   let dragStartOffset = 0;
-  let touchResumeTimer = null;
+  let touchStartY = 0;
+  let touchLocked = false;
   let userInteracted = false;
+  let touchResumeTimer = null;
+  const autoSpeed = 0.6;
 
-  function getMaxOffset() {
-    return slideWidth() * total;
+  function clamp() {
+    // Reposiciona sem animação se saiu dos limites do set do meio
+    const max = loopStart() + slideW() * total;
+    const min = loopStart();
+    if (offset >= max) {
+      offset -= slideW() * total;
+      track.style.transition = 'none';
+      track.style.transform = `translateX(${-offset}px)`;
+    } else if (offset < min) {
+      offset += slideW() * total;
+      track.style.transition = 'none';
+      track.style.transform = `translateX(${-offset}px)`;
+    }
   }
 
   function animate() {
     if (!isHovered && !isDragging && !userInteracted) {
       offset += autoSpeed;
-      if (offset >= getMaxOffset()) offset -= getMaxOffset();
+      clamp();
       track.style.transform = `translateX(${-offset}px)`;
     }
     requestAnimationFrame(animate);
@@ -1414,10 +1433,8 @@ document.querySelectorAll('.faq-q').forEach(btn => {
   });
   window.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
-    const delta = dragStartX - e.clientX;
-    offset = dragStartOffset + delta;
-    if (offset < 0) offset += getMaxOffset();
-    if (offset >= getMaxOffset()) offset -= getMaxOffset();
+    offset = dragStartOffset + (dragStartX - e.clientX);
+    clamp();
     track.style.transform = `translateX(${-offset}px)`;
   });
   window.addEventListener('mouseup', () => {
@@ -1427,9 +1444,6 @@ document.querySelectorAll('.faq-q').forEach(btn => {
   });
 
   // Touch drag
-  let touchStartY = 0;
-  let touchLocked = false;
-
   wrapper.addEventListener('touchstart', (e) => {
     clearTimeout(touchResumeTimer);
     userInteracted = true;
@@ -1443,34 +1457,21 @@ document.querySelectorAll('.faq-q').forEach(btn => {
   wrapper.addEventListener('touchmove', (e) => {
     const dx = Math.abs(e.touches[0].clientX - dragStartX);
     const dy = Math.abs(e.touches[0].clientY - touchStartY);
-
     if (!touchLocked) {
-      // define direção do gesto na primeira movimentação
-      if (dx > dy && dx > 5) {
-        touchLocked = true;
-        isDragging = true;
-      } else if (dy > dx && dy > 5) {
-        // gesto vertical — deixa a página rolar normalmente
-        isDragging = false;
-        return;
-      }
+      if (dx > dy && dx > 5) { touchLocked = true; isDragging = true; }
+      else if (dy > dx && dy > 5) { isDragging = false; return; }
     }
-
     if (!isDragging) return;
-    e.preventDefault(); // trava scroll da página
-    const delta = dragStartX - e.touches[0].clientX;
-    offset = dragStartOffset + delta;
-    if (offset < 0) offset += getMaxOffset();
-    if (offset >= getMaxOffset()) offset -= getMaxOffset();
+    e.preventDefault();
+    offset = dragStartOffset + (dragStartX - e.touches[0].clientX);
+    clamp();
     track.style.transform = `translateX(${-offset}px)`;
   }, { passive: false });
 
   wrapper.addEventListener('touchend', () => {
     isDragging = false;
     touchLocked = false;
-    touchResumeTimer = setTimeout(() => {
-      userInteracted = false;
-    }, 2000);
+    touchResumeTimer = setTimeout(() => { userInteracted = false; }, 2000);
   });
 
   animate();
